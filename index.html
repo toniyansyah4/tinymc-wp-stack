@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POST BLOG</title>
+    <style>
+      .body {
+        text-align: center;
+        margin-top: 100px;
+      }
+      #title {
+        width: 300px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      #btn {
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin-top: 10px;
+        background-color: blue;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- nav blank color blue -->
+    <nav style="background-color: #98eefe; height: 50px"></nav>
+    <div class="body">
+      <h1>Wellcome to HTML Editor</h1>
+      <h3>Publish content to your WordPress site in just one-click</h3>
+      <h5>Add New post to Wordpress below</h5>
+      <div>
+        <!-- text input -->
+        <input id="title" type="text" placeholder="Type your Post Title" />
+        <!-- content tiny mce text editor -->
+        <textarea id="content"></textarea>
+        <!-- button -->
+        <button id="btn">Publish</button>
+      </div>
+    </div>
+  </body>
+</html>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+<script>
+  <!-- tiny editor online -->
+  // tinymce init
+  tinymce.init({
+    selector: "#content",
+    height: 500,
+    menubar: false,
+    plugins: [
+      "advlist autolink lists link image charmap print preview anchor",
+      "searchreplace visualblocks code fullscreen",
+      "insertdatetime media table paste code help wordcount",
+    ],
+    toolbar:
+      "undo redo | formatselect | bold italic backcolor | \
+                alignleft aligncenter alignright alignjustify | \
+                bullist numlist outdent indent | removeformat | help",
+  });
+
+  // button click event
+  document.getElementById("btn").addEventListener("click", function () {
+    // get title value
+    var title = document.getElementById("title").value;
+    // get content value
+    var content = tinymce.get("content").getContent();
+    // create form data
+    var formData = new FormData();
+    // append title
+    formData.append("title", title);
+    // append content
+    formData.append("content", content);
+    // ajax request
+    var xhr = new XMLHttpRequest();
+    // open method
+    xhr.open("POST", "http://localhost:8000/api/blog");
+    // send request
+    xhr.send(formData);
+    // onload event
+    alert("Post Created Successfully");
+  });
+</script>
